@@ -31,17 +31,12 @@ function App() {
 
 	useEffect(() => {
 		async function kotao() {
-			let symbolArray = [];
-			await fetch("/v1/symbols")
-				.then((res) => res.json())
-				.then((json) =>
-					json
-						.slice(0, 5)
-						.forEach((item) =>
-							symbolArray.push("t" + item.toUpperCase())
-						)
-				);
-			symbolArray.forEach((symbol) => {
+			let response = await fetch("/v1/symbols");
+			response = await response.json();
+			response = response
+				.slice(0, 5)
+				.map((item) => "t" + item.toUpperCase());
+			response.forEach((symbol) => {
 				const w = new WebSocket("wss://api-pub.bitfinex.com/ws/2");
 				let onlyFirstRenderFlag = false;
 				let isFavoriteFlag = false;
